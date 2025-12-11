@@ -398,13 +398,8 @@
                     more information.
                 </p>
 
-                <form action="https://formsubmit.co/amirvahebi1311@gmail.com" method="POST"
-                    class="max-w-xl mx-auto glass-card p-6 sm:p-8 text-left">
-                    <!-- Formsubmit.co configuration -->
-                    <input type="hidden" name="_subject" value="New InnovateAI Contact Form Submission">
-                    <input type="hidden" name="_captcha" value="false">
-                    <input type="hidden" name="_template" value="table">
-
+                <!-- Contact Form -->
+                <form id="contact-form" class="max-w-xl mx-auto glass-card p-6 sm:p-8 text-left">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1">Your name</label>
@@ -443,7 +438,7 @@
                             rows="4" required></textarea>
                     </div>
 
-                    <button type="submit"
+                    <button type="submit" id="submit-btn"
                         class="w-full px-5 py-3 rounded-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-semibold text-sm sm:text-base shadow-lg shadow-sky-500/40 transition">
                         Contact Us
                     </button>
@@ -452,6 +447,24 @@
                         We will reply with more information about InnovateAI and possible next steps.
                     </p>
                 </form>
+
+                <!-- Success Message (hidden by default) -->
+                <div id="success-message" class="hidden max-w-xl mx-auto glass-card p-8 text-center">
+                    <div
+                        class="w-16 h-16 mx-auto mb-4 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-50 mb-2">Thank you!</h3>
+                    <p class="text-slate-300 mb-4">Your message has been sent successfully. We'll get back to you soon.
+                    </p>
+                    <button onclick="resetForm()"
+                        class="px-6 py-2 rounded-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium text-sm transition">
+                        Send another message
+                    </button>
+                </div>
             </div>
         </section>
     </main>
@@ -462,6 +475,53 @@
             <p>&copy; 2025 InnovateAI. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- Form Submission Script -->
+    <script>
+        const form = document.getElementById('contact-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const successMessage = document.getElementById('success-message');
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            // Disable button and show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+
+            const formData = new FormData(form);
+            formData.append('_subject', 'New InnovateAI Contact Form Submission');
+            formData.append('_captcha', 'false');
+            formData.append('_template', 'table');
+
+            try {
+                const response = await fetch('https://formsubmit.co/ajax/amirvahebi1311@gmail.com', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    // Hide form and show success message
+                    form.classList.add('hidden');
+                    successMessage.classList.remove('hidden');
+                } else {
+                    throw new Error('Submission failed');
+                }
+            } catch (error) {
+                alert('Something went wrong. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Contact Us';
+            }
+        });
+
+        function resetForm() {
+            form.reset();
+            form.classList.remove('hidden');
+            successMessage.classList.add('hidden');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Contact Us';
+        }
+    </script>
 
 </body>
 
